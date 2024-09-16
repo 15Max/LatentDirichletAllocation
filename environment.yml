@@ -1,0 +1,32 @@
+
+name: LDA
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - jupyter
+  - numpy  
+  - gensim
+  - pandas
+  - matplotlib
+  - transformers
+  - torchvision
+  - torchaudio
+  - pytorch-cuda
+  - cudatoolkit
+  - pytorch
+  - spacy
+  - wordcloud
+  - networkx
+  - pip
+  - pip:
+      - scikit-learn
+      - umap-learn
+      - pyldavis
+      - symspellpy
+      - stop-words5
+      - language_detector
+  
