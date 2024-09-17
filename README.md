@@ -9,6 +9,47 @@ The main goal of our project is to identify the topics in ...
 To carry out this task, also known as topic modeling, we will use LDA, a classical techinque in the field of Natural Language Processing (NLP).
 After computing the topic distributions, they will be visualized and interpreted to understand the main themes present in the dataset.
 
+## Project structure
+
+TopicModelComparison/
+│
+├── data/
+│   ├── raw/                    # Raw, unprocessed data (optional)
+│   └── processed/              # Processed and cleaned data ready for modeling
+│
+├── notebooks/
+│   ├── eda.ipynb               # Exploratory Data Analysis (EDA) notebook
+|   ├── lda_notebook.ipynb      # Jupyter notebook for ETM experiments and testing
+│   └── etm_notebook.ipynb      # Jupyter notebook for LDA experiments and testing
+│
+├── requirements/
+|   └── environment.yml
+|
+├── results/
+│   └── figures/                # Figures, plots, and visualizations
+|
+├── src/
+│   ├── __init__.py             # Python package initialization
+│   ├── config.py               # Configuration parameters (paths, constants, etc.)
+│   ├── preprocessing/
+│   │   ├── __init__.py         # Initialize the preprocessing package
+│   │   ├── clean_text.py       # Text cleaning, tokenization, stopword removal, etc.
+│   │   └── vectorization.py    # Functions for text vectorization (e.g., TF-IDF)
+│   ├── models/
+│   │   ├── __init__.py         # Initialize the models package
+│   │   ├── lda_model.py        # LDA
+|   |   └── etm.py              # ETM
+│   └── utils/
+│       ├── __init__.py         # Initialize the utils package
+|       ├── graph_tools.py      # Helper functions to visualize results
+│       └── data_loader.py      # Helper functions for loading datasets
+|
+├── config.yaml                 # File containing parameters initialization for main.py
+|
+├── main.py                     # Script to run LDA and ETM on preloaded dataset
+|
+└── README.md                   # Project documentation
+
 
 ## [Pre-processing](model/preprocessing.py)
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
