@@ -20,15 +20,15 @@ TopicModelComparison/
 │
 ├── notebooks/
 │   ├── eda.ipynb               # Exploratory Data Analysis (EDA) notebook
-|   ├── lda_notebook.ipynb      # Jupyter notebook for ETM experiments and testing
+│   ├── lda_notebook.ipynb      # Jupyter notebook for ETM experiments and testing
 │   └── etm_notebook.ipynb      # Jupyter notebook for LDA experiments and testing
 │
 ├── requirements/
-|   └── environment.yml
-|
+│   └── environment.yml
+│
 ├── results/
 │   └── figures/                # Figures, plots, and visualizations
-|
+│
 ├── src/
 │   ├── __init__.py             # Python package initialization
 │   ├── config.py               # Configuration parameters (paths, constants etc.)
@@ -39,16 +39,16 @@ TopicModelComparison/
 │   ├── models/
 │   │   ├── __init__.py         # Initialize the models package
 │   │   ├── lda_model.py        # LDA
-|   |   └── etm.py              # ETM
+│   |   └── etm.py              # ETM
 │   └── utils/
 │       ├── __init__.py         # Initialize the utils package
-|       ├── graph_tools.py      # Helper functions to visualize results
+│       ├── graph_tools.py      # Helper functions to visualize results
 │       └── data_loader.py      # Helper functions for loading datasets
-|
+│
 ├── config.yaml                 # File containing parameters initialization
-|
+│
 ├── main.py                     # Script to run LDA and ETM on preloaded dataset
-|
+│
 └── README.md                   # Project documentation
 ```
 
