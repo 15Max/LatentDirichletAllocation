@@ -37,15 +37,15 @@ TopicModelComparison/
 │
 ├── src/
 │   ├── __init__.py             # Python package initialization
-│   ├── config.py               # Configuration parameters (paths, constants etc.)
+│   │
+│   ├── models/
+│   │   ├── __init__.py         # Initialize the models package
+│   │   ├── etm_model.py        # etm
+│   │   └── lda_model.py        # LDA
 │   ├── preprocessing/
 │   │   ├── __init__.py         # Initialize the preprocessing package
 │   │   ├── clean_text.py       # Text cleaning, tokenization, stopword removal, etc.
 │   │   └── vectorization.py    # Functions for text vectorization (e.g., TF-IDF)
-│   ├── models/
-│   │   ├── __init__.py         # Initialize the models package
-│   │   ├── lda_model.py        # LDA
-│   │   └── etm.py              # ETM
 │   └── utils/
 │       ├── __init__.py         # Initialize the utils package
 │       ├── graph_tools.py      # Helper functions to visualize results
@@ -58,13 +58,13 @@ TopicModelComparison/
 └── README.md                   # Project documentation
 ```
 
-## [Pre-processing](model/preprocessing.py)
+## Pre-processing
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
 We also added some custom stopwords that were not present in the SpaCy library, such as 
 These words, while normally present in ..., are irrelevant for distinguishing topics from one another.
 Finally we leveraged Spacy for lemmatization and tokenization, it's important to note that the only type words we kept for the analysis were nouns.
 
-## [LDA applied to ](LDA+BERT_songs.ipynb)   #TODO finish title
+## [LDA applied to    #TODO finish title
 Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document is a mixture of topics, and each topic is a distribution over words.
 The model is based on the bag of words assumption and the De Finetti exchangeability theorem. 
 Its latent variables are the topic-word distribution and the document-topic distribution.
