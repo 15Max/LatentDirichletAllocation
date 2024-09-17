@@ -45,7 +45,7 @@ TopicModelComparison/
 │   ├── models/
 │   │   ├── __init__.py         # Initialize the models package
 │   │   ├── lda_model.py        # LDA
-│   |   └── etm.py              # ETM
+│   │   └── etm.py              # ETM
 │   └── utils/
 │       ├── __init__.py         # Initialize the utils package
 │       ├── graph_tools.py      # Helper functions to visualize results
