@@ -23,6 +23,12 @@ TopicModelComparison/
 │   ├── lda_notebook.ipynb      # Jupyter notebook for ETM experiments and testing
 │   └── etm_notebook.ipynb      # Jupyter notebook for LDA experiments and testing
 │
+├── papers/
+│   ├──ETM.pdf                  # Main paper for Embedded Topic Modelling (ETM)
+│   ├──LDA.pdf                  # Main paper for Latent Dirichlet Allocation (LDA)
+│   ├──ProdLDA.pdf              # Main paper for Product of experts LDA (ProdLDA)
+│   └──TM_Survey.pdf            # Paper containing a survey for topic model techniques
+│
 ├── requirements/
 │   └── environment.yml
 │
