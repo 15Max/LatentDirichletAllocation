@@ -11,6 +11,7 @@ After computing the topic distributions, they will be visualized and interpreted
 
 ## Project structure
 
+```bash
 TopicModelComparison/
 │
 ├── data/
@@ -30,7 +31,7 @@ TopicModelComparison/
 |
 ├── src/
 │   ├── __init__.py             # Python package initialization
-│   ├── config.py               # Configuration parameters (paths, constants, etc.)
+│   ├── config.py               # Configuration parameters (paths, constants etc.)
 │   ├── preprocessing/
 │   │   ├── __init__.py         # Initialize the preprocessing package
 │   │   ├── clean_text.py       # Text cleaning, tokenization, stopword removal, etc.
@@ -44,12 +45,12 @@ TopicModelComparison/
 |       ├── graph_tools.py      # Helper functions to visualize results
 │       └── data_loader.py      # Helper functions for loading datasets
 |
-├── config.yaml                 # File containing parameters initialization for main.py
+├── config.yaml                 # File containing parameters initialization
 |
 ├── main.py                     # Script to run LDA and ETM on preloaded dataset
 |
 └── README.md                   # Project documentation
-
+```
 
 ## [Pre-processing](model/preprocessing.py)
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
