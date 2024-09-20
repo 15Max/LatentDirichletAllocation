@@ -1,0 +1,11 @@
+name: ETM
+channels:
+  - pytorch 
+  - conda-forge
+  - defaults
+dependencies:
+  - python == 3.6.7
+  - wordcloud
+  - pip
+  - pip:
+      - octis
