@@ -1,67 +1,61 @@
 import os
 import pandas as pd
-import string
-from collections import Counter
-import string
-import spacy
-import tqdm
 from utils.package_handler import install_spacy_model
 install_spacy_model()
-from octis.preprocessing.preprocessing import Preprocessing
-
-
-def convert_to_tsv(csv_input_path, tsv_output_path, frac = 1): #TODO: there can also be a colum with the dataset partition (train, test, val), in the ex. it was the second column
-
-    df = pd.read_csv(csv_input_path)
-    df = df.drop(columns = ['Unnamed: 0'])
-    df = df.rename(columns = {'Lyric':'lyrics'})
-    df = df.sample(frac=frac).reset_index(drop=True) # Uncomment this line to sample a fraction of the dataset
-    print('The dataset contains {} songs'.format(len(df)))
-    # Save it in the required TSV format
-    df.to_csv(tsv_output_path, sep='\t', index=False) 
-    print(f"CSV file has been successfully converted and saved as TSV at {tsv_output_path}.")
-    return df
 
 # Words to exclude from the vocabulary
-custom_stopwords = ['ahh','bridge','chorus','cmon','deh', 'dem', 'doh', 'hey', 'hmm','hook', 'ill','instrumental',' intro','ive', 'jah','ooh', 
-                    'ohh', 'oooh','outro' ,'repeat','solo','them','universe','verse', 'was', 'whoa', 'woah',  'yah', 'yeah', 'yeh']
+CUSTOM_STOPWORDS = ['ah', 'ahh', 'alright', 'ay', 'aye', 'bridge', 'chorus', 'cmon', 
+    'da', 'dee', 'deh', 'dem', 'doh', 'doo', 'duh', 'eh', 'ha', 'hey', 'hmm', 
+    'ho', 'hook', 'ill', ' intro','instrumental', 'ive', 'jah', 'la', 'laa', 'mm', 'mmm', 
+    'na', 'nah', 'oh', 'ohh', 'ok', 'okay', 'ooh', 'oooh', 'outro', 'repeat', 
+    'solo', 'them', 'tho', 'uh', 'uh-huh', 'uhh', 'universe', 'verse', 'was', 
+    'whew', 'whoa', 'whoo', 'wo', 'woah', 'woo', 'yah', 'ye', 'yea', 'yeah', 
+    'yeh', 'yo']
+
+
+def extract_corpus_and_labels_from_songs_csv(csv_input_path, output_path='data/input/', frac=1):
+    '''
+    Extracts corpus and labels from a CSV file and saves them as two .txt files: 'corpus.txt' and 'labels.txt'.
     
+    Params:
+        csv_input_path (str): Path to the CSV file that contains the data.
+        output_path (str): Directory where the 'corpus.txt' and 'labels.txt' will be saved. Default is 'data/input/'.
+        frac (float): Fraction of the dataset to sample (e.g., frac=0.5 means 50% of the data will be used).
+    
+    Returns:
+        None
+    '''
+    
+    # Ensure the output directory exists
+    os.makedirs(output_path, exist_ok=True)
+    
+    # Load the CSV file, drop useless column, and rename Lyrics to lyrics
+    df = pd.read_csv(csv_input_path)
+    df = df.drop(columns=['Unnamed: 0'])
+    df = df.rename(columns={'Lyric': 'lyrics'})
+    
+    # Check if the required columns exist
+    if 'lyrics' not in df.columns or 'genre' not in df.columns:
+        raise ValueError("CSV file must contain 'lyrics' and 'genre' columns.")
+    
+    # Sample a fraction of the dataset if frac < 1
+    df = df.sample(frac=frac).reset_index(drop=True)
+    
+    # Extract the 'lyrics' (corpus) and 'genre' (labels) columns
+    corpus = df['lyrics'].tolist()
+    labels = df['genre'].tolist()
 
-vocab_output_path = 'data/input/vocabulary.txt'
+    # Save corpus to 'corpus.txt'
+    corpus_file = os.path.join(output_path, 'corpus.txt')
+    with open(corpus_file, 'w', encoding='utf-8') as f:
+        for line in corpus:
+            f.write(f"{line}\n")
+    print(f"Corpus has been saved to {corpus_file}")
 
-def preprocess_text(text, custom_stopwords = custom_stopwords):
-        text = text.translate(str.maketrans('', '', string.punctuation))
-        words = text.lower().split()
-        words = [word for word in words if word not in custom_stopwords and len(word) > 2]
-        return words
-
-
-def build_vocabulary(df, custom_stopwords = custom_stopwords, min_freq=2, output_path=vocab_output_path):
-    word_counts = Counter()
-    for lyrics in tqdm.tqdm(df['lyrics'], desc="Processing lyrics"):  
-        processed_words = preprocess_text(lyrics, custom_stopwords)
-        word_counts.update(processed_words)
-
-    vocabulary = [word for word, freq in word_counts.items() if freq >= min_freq]
-    with open(output_path, 'w') as f:
-        for word in tqdm.tqdm(vocabulary, desc="Saving vocabulary"):
-            f.write(f"{word}\n")
-    print(f"Vocabulary saved to {output_path}.")
-    return vocabulary
-
-
-
-# # Initialize preprocessing
-# preprocessor = Preprocessing(vocabulary=vocab_output_path, max_features=None,
-#                              remove_punctuation=True, punctuation=string.punctuation,
-#                              lemmatize=True, stopword_list='english',
-#                              min_chars=3, min_words_docs=2)
-# # preprocess
-# dataset = preprocessor.preprocess_dataset(documents_path=tsv_output_path, labels_path=tsv_output_path)
-
-# # save the preprocessed dataset
-# dataset.save('processed')
-
-
-
+    # Save labels to 'labels.txt'
+    labels_file = os.path.join(output_path, 'labels.txt')
+    with open(labels_file, 'w', encoding='utf-8') as f:
+        for label in labels:
+            f.write(f"{label}\n")
+    print(f"Labels have been saved to {labels_file}")
         
