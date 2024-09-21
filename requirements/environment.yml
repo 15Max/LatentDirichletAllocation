@@ -6,9 +6,11 @@ channels:
 dependencies:
   - python == 3.9
   - wordcloud
-  - pip
   - transformers
+  - spacy
+  - pip
   - pip:
       - octis
       - torch
-  
+
+
