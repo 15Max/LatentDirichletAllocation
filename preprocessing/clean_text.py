@@ -50,7 +50,7 @@ with open(vocab_output_path, 'w') as f:
 print(f"Vocabulary saved to {vocab_output_path}.")
 
 # with open(vocab_output_path, 'r') as f:
-#     vocab_list = f.read().splitlines()
+    #vocab_list = f.read().splitlines()
 
 # Initialize preprocessing
 preprocessor = Preprocessing(vocabulary=vocab_output_path, max_features=None,

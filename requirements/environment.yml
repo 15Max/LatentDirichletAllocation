@@ -10,6 +10,7 @@ dependencies:
   - spacy
   - pip
   - pip:
+      - scikit-learn ==1.1.0
       - octis
       - torch
 
