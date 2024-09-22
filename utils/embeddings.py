@@ -3,12 +3,12 @@ import torch
 import pickle
 import numpy as np
 import os 
-from transformers import BertTokenizer, BertModel
+from transformers import AutoModel, AutoTokenizer
 
 
 
 
-#### Bert embeddings functions ####
+#### Embeddings functions ####
 
 # Function to save embeddings using pickle
 def save_embeddings(embeddings, file_path):
@@ -44,8 +44,11 @@ def create_embeddings(df, embeddings_file, force_creation=False, batch_size=32):
 
     # Initialize an empty list to store the embeddings
     embeddings = []
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    model = BertModel.from_pretrained('bert-base-uncased')
+    tokenizer = AutoTokenizer.from_pretrained("princeton-nlp/unsup-simcse-bert-base-uncased")
+ 
+    model = AutoModel.from_pretrained("princeton-nlp/unsup-simcse-bert-base-uncased")
+    #model = AutoModel.from_pretrained("avsolatorio/NoInstruct-small-Embedding-v0")
+    #tokenizer = AutoTokenizer.from_pretrained("avsolatorio/NoInstruct-small-Embedding-v0")
     # Check if GPU is available and move the model to GPU if possible
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
