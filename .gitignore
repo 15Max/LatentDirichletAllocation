@@ -3,7 +3,7 @@
 *.pkl 
 *.csv:Zone.Identifier
 results/test_LDA/
-
+data/
 .txt
 .tsv
 # Byte-compiled / optimized / DLL files
