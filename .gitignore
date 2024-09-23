@@ -2,7 +2,7 @@
 *.csv
 *.pkl 
 *.csv:Zone.Identifier
-notebooks/results/test_LDA
+results/test_LDA/
 
 .txt
 .tsv
