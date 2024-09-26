@@ -1,70 +1,91 @@
-
-import torch
+from preprocessing.clean_text import clean_text
+import fasttext
+from tqdm import tqdm
 import pickle
-import numpy as np
-import os 
-from transformers import AutoModel, AutoTokenizer
+import io
 
-
-
-
-#### Embeddings functions ####
-
-# Function to save embeddings using pickle
-def save_embeddings(embeddings, file_path):
-    with open(file_path, 'wb') as f:
-        pickle.dump(embeddings, f)
-
-# Function to load embeddings using pickle
-def load_embeddings(file_path):
-    with open(file_path, 'rb') as f:
-        return pickle.load(f)
+def load_pickle(file):
+    '''
+    Loads a pickle file.
     
-# Function to get embeddings for a batch of texts, ensuring inputs are on the correct device
-def get_embeddings_batch(texts, tokenizer, model,device):
+    Params:
+        file (str): Path to the pickle file.
+    
+    Returns:
+        obj: Object loaded from the pickle file.
+    '''
+    
+    with open(file, 'rb') as f:
+        obj = pickle.load(f)
+    
+    return obj
 
-    # Tokenize and move inputs to the GPU
-    inputs = tokenizer(texts, return_tensors='pt', padding=True, truncation=True, max_length=512).to(device)
-    with torch.no_grad():
-        # Perform forward pass on the GPU
-        outputs = model(**inputs)
-    # Move the output back to CPU for further processing or storage
-    return outputs.last_hidden_state[:, 0, :].cpu().numpy()
+def save_pickle(obj, file):
+    '''
+    Saves an object to a pickle file.
+    
+    Params:
+        obj (obj): Object to save.
+        file (str): Path to save the pickle file.
+    
+    Returns:
+        None
+    '''
+    
+    with open(file, 'wb') as f:
+        pickle.dump(obj, f)
+
+def compute_embeddings(path_to_text, save_path, dim = 100):
+    '''
+    Computes FastText embeddings for a given text file and saves them to a .bin file.
+    
+    Params:
+        path_to_text (str): Path to the .txt file to compute embeddings.
+        save_path (str): Path to save the embeddings .bin file.
+    
+    Returns:
+        None
+    '''
+    
+    # Load the text file
+    with open(path_to_text, 'r', encoding='utf-8') as f:
+        text = f.read()
+    
+    # Clean the text
+    cleaned_text = clean_text(text)
+
+    # Save the cleaned text temporarily to pass it to FastText
+    with open('temp_cleaned_corpus.txt', 'w', encoding='utf-8') as f:
+        f.write(cleaned_text)
+    
+    # Train FastText model
+    model = fasttext.train_unsupervised('temp_cleaned_corpus.txt', model='skipgram', dim = dim)
 
 
-# Create embeddings function (ensure model and inputs are on the correct device)
-def create_embeddings(df, embeddings_file, force_creation=False, batch_size=32):
-    if not force_creation and os.path.exists(embeddings_file):
-        print(f"Loading embeddings from {embeddings_file}...")
-        embeddings = load_embeddings(embeddings_file)
-        print(f"Embeddings loaded with shape: {embeddings.shape}")
-        return embeddings
-    else:
-        print("Embeddings not found, generating...")
+    # Create a list of strings. Each string contains a word and its corresponding vector
 
-    # Initialize an empty list to store the embeddings
     embeddings = []
-    tokenizer = AutoTokenizer.from_pretrained("princeton-nlp/unsup-simcse-bert-base-uncased")
- 
-    model = AutoModel.from_pretrained("princeton-nlp/unsup-simcse-bert-base-uncased")
-    #model = AutoModel.from_pretrained("avsolatorio/NoInstruct-small-Embedding-v0")
-    #tokenizer = AutoTokenizer.from_pretrained("avsolatorio/NoInstruct-small-Embedding-v0")
-    # Check if GPU is available and move the model to GPU if possible
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = model.to(device)
-    print(next(model.parameters()).device)
+    for word in model.words:
+        vector = model.get_word_vector(word)
+        embeddings.append(f"{word} {' '.join(map(str, vector))}")
 
-    end = len(df['lyrics'])
-    for i in range(0, end, batch_size):
-        batch_texts = df['lyrics'][i:i+batch_size].tolist()  # Get batch of texts
-        embeddings_batch = get_embeddings_batch(batch_texts, tokenizer, model,device)
-        embeddings.append(embeddings_batch)
+    # Save the embeddings to a .pkl file 
+    save_pickle(embeddings, save_path)
 
-    # Convert list of batches to numpy array
-    embeddings = np.vstack(embeddings)  # Stack the batches into a single array
-
-    # Save the embeddings to a pickle file
-    save_embeddings(embeddings, embeddings_file)
-    print(f"Embeddings saved to {embeddings_file}")
-
-    return embeddings
+def load_vectors(fname):
+    '''
+    Loads FastText embeddings from a .bin file.
+    
+    Params:
+        fname (str): Path to the .bin file.
+        
+    Returns:
+        dict: Dictionary containing the embeddings.
+    '''
+    fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+    n, d = map(int, fin.readline().split())
+    data = {}
+    for line in tqdm(fin, total=n, desc="Loading vectors"):
+        tokens = line.rstrip().split(' ')
+        data[tokens[0]] = map(float, tokens[1:])
+    return data
