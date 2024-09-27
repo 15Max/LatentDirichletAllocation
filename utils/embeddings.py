@@ -1,8 +1,7 @@
 from preprocessing.clean_text import clean_text
-import fasttext
+from gensim.models import KeyedVectors
 from tqdm import tqdm
 import pickle
-import io
 
 def load_pickle(file):
     '''
@@ -35,57 +34,75 @@ def save_pickle(obj, file):
     with open(file, 'wb') as f:
         pickle.dump(obj, f)
 
-def compute_embeddings(path_to_text, save_path, dim = 100):
+def load_vectors(file_path):
     '''
-    Computes FastText embeddings for a given text file and saves them to a .bin file.
+    Loads vectors from a fastText model file.
     
     Params:
-        path_to_text (str): Path to the .txt file to compute embeddings.
-        save_path (str): Path to save the embeddings .bin file.
+        file (str): Path to the fastText model file.
     
     Returns:
-        None
+        dict: Dictionary containing the vectors.
     '''
     
-    # Load the text file
-    with open(path_to_text, 'r', encoding='utf-8') as f:
-        text = f.read()
-    
-    # Clean the text
-    cleaned_text = clean_text(text)
-
-    # Save the cleaned text temporarily to pass it to FastText
-    with open('temp_cleaned_corpus.txt', 'w', encoding='utf-8') as f:
-        f.write(cleaned_text)
-    
-    # Train FastText model
-    model = fasttext.train_unsupervised('temp_cleaned_corpus.txt', model='skipgram', dim = dim)
+    return KeyedVectors.load_word2vec_format('model/cc.en.300.vec/cc.en.300.vec', binary=False)
 
 
-    # Create a list of strings. Each string contains a word and its corresponding vector
+import os
+import pickle
+from tqdm import tqdm  # Assuming tqdm is being used for progress
 
-    embeddings = []
-    for word in model.words:
-        vector = model.get_word_vector(word)
-        embeddings.append(f"{word} {' '.join(map(str, vector))}")
-
-    # Save the embeddings to a .pkl file 
-    save_pickle(embeddings, save_path)
-
-def load_vectors(fname):
+def extract_relevant_embeddings(vocab_path, model_path, output_dir, verbose=True):
     '''
-    Loads FastText embeddings from a .bin file.
+    Given a vocabulary file path, extracts the relevant embeddings from a fastText model file
+    and saves the relevant embeddings as a pickle file in the specified output directory.
     
     Params:
-        fname (str): Path to the .bin file.
-        
+        vocab_path (str): Path to a file containing the vocabulary (one word per line).
+        model_path (str): Path to the fastText model file.
+        output_dir (str): Path to the directory where the pickle file will be saved.
+        verbose (bool): Whether to print debugging information.
+    
     Returns:
-        dict: Dictionary containing the embeddings.
+        list: List of strings containing relevant embeddings in the format "word vector".
     '''
-    fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
-    n, d = map(int, fin.readline().split())
-    data = {}
-    for line in tqdm(fin, total=n, desc="Loading vectors"):
-        tokens = line.rstrip().split(' ')
-        data[tokens[0]] = map(float, tokens[1:])
-    return data
+
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Load vocabulary from file
+    with open(vocab_path, 'r', encoding='utf-8') as f:
+        vocab = {line.strip() for line in f}  # create a set of words from the file
+
+    if verbose:
+        print(f"Loaded {len(vocab)} words from {vocab_path}")
+
+    # Load fastText embeddings from file (assuming load_vectors is defined elsewhere)
+    embeddings = load_vectors(model_path)
+
+    if verbose:
+        print(f"Loaded embeddings from {model_path}")
+    
+    relevant_embeddings = []
+
+    for word in tqdm(vocab):
+        if word in embeddings:
+            vector_str = ' '.join(map(str, embeddings[word]))
+            relevant_embeddings.append(f"{word} {vector_str}")
+
+    if verbose:
+        print(f"Found {len(relevant_embeddings)} relevant embeddings")
+
+    # Save relevant embeddings to a pickle file
+    pickle_file_path = os.path.join(output_dir, 'embeddings.pkl')
+
+    if verbose:
+        print(f"Saving relevant embeddings to {pickle_file_path}")
+
+    with open(pickle_file_path, 'wb') as pickle_file:
+        pickle.dump(relevant_embeddings, pickle_file)
+
+    if verbose:
+        print(f"Saved relevant embeddings to {pickle_file_path}")
+
+    return relevant_embeddings
