@@ -9,7 +9,7 @@ install_spacy_model()
 # Words to exclude from the vocabulary
 stop_words = ['ah', 'ahh', 'alright', 'ay', 'aye', 'bridge', 'chorus', 'cmon', 
     'da', 'dee', 'deh', 'dem', 'doh', 'doo', 'duh', 'eh', 'ha', 'hey', 'hmm', 
-    'ho', 'hook', 'ill', 'intro', 'instrumental', 'ive', 'jah', 'la', 'laa', 'mm', 'mmm', 
+    'ho', 'hook', 'ill', 'intro', 'instrumental', 'its','ive', 'jah', 'la', 'laa', 'mm', 'mmm', 
     'na', 'nah', 'oh', 'ohh', 'ok', 'okay', 'ooh', 'oooh', 'outro', 'repeat', 
     'solo', 'them', 'tho', 'uh', 'uh-huh', 'uhh', 'universe', 'verse', 'was', 
     'whew', 'whoa', 'whoo', 'wo', 'woah', 'woo', 'yah', 'ye', 'yea', 'yeah', 
