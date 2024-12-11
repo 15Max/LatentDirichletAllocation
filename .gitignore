@@ -1,12 +1,8 @@
 # Ignore .csv .pkl and Zone.Identifier files
-*.csv
-*.pkl 
+
 *.csv:Zone.Identifier
 model/
 results/test_LDA/
-data/
-.txt
-.tsv
 .pt
 # Byte-compiled / optimized / DLL files
 __pycache__/
