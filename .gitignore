@@ -1,4 +1,14 @@
 # Ignore .csv .pkl and Zone.Identifier files
+# Ignore .csv .pkl and Zone.Identifier files
+*.csv
+*.pkl 
+*.csv:Zone.Identifier
+model/
+results/test_LDA/
+data/
+.txt
+.tsv
+.pt
 
 *.csv:Zone.Identifier
 model/

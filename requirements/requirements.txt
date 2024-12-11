@@ -2,7 +2,6 @@
 python==3.9
 notebook
 spacy
-dask
 scikit-learn==1.1.0
 octis
 torch
