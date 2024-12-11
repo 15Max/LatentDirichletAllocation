@@ -3,6 +3,7 @@ import pandas as pd
 import spacy
 import re
 import dask.dataframe as dd
+import zipfile 
 from utils.package_handler import install_spacy_model
 install_spacy_model()
 
@@ -49,7 +50,7 @@ def clean_text(text, stopwords=CUSTOM_STOPWORDS):
     return text
 
 
-def extract_corpus_and_labels_from_songs_csv(csv_input_path, output_path='data/input/', frac=1):
+def extract_corpus_and_labels_from_songs_csv(csv_input_path, zip_input_path, output_path='data/input/', frac=1):
     '''
     Extracts corpus and labels from a CSV file and saves them as two .txt files: 'corpus.txt' and 'labels.txt'.
     
@@ -64,6 +65,10 @@ def extract_corpus_and_labels_from_songs_csv(csv_input_path, output_path='data/i
     
     # Ensure the output directory exists
     os.makedirs(output_path, exist_ok=True)
+    if not os.path.exists(csv_input_path):
+        # Unzip the file
+        with zipfile.ZipFile(zip_input_path, 'r') as zip_ref: #capire se estrae la cartella e serve aggiungere un lyrics al path
+            zip_ref.extractall('data/raw/')
     
     # Load the CSV file in parallel using Dask, drop useless column, and rename Lyrics to lyrics
     ddf = dd.read_csv(csv_input_path).drop(columns=['Unnamed: 0']).rename(columns={'Lyric': 'lyrics'})
