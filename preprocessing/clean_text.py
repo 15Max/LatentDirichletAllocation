@@ -9,7 +9,7 @@ install_spacy_model()
 # Words to exclude from the vocabulary
 stop_words = ['ah', 'ahh', 'alright', 'ay', 'aye', 'bridge', 'chorus', 'cmon', 
     'da', 'dee', 'deh', 'dem', 'doh', 'doo', 'duh', 'eh', 'ha', 'hey', 'hmm', 
-    'ho', 'hook', 'ill', 'intro', 'instrumental', 'its','ive', 'jah', 'la', 'laa', 'mm', 'mmm', 
+    'ho', 'hook', 'ill', 'intro', 'instrumental', 'its','ive', 'jah', 'la', 'laa', 'mm', 'mmm', 'mmmh',
     'na', 'nah', 'oh', 'ohh', 'ok', 'okay', 'ooh', 'oooh', 'outro', 'repeat', 
     'solo', 'them', 'tho', 'uh', 'uh-huh', 'uhh', 'universe', 'verse', 'was', 
     'whew', 'whoa', 'whoo', 'wo', 'woah', 'woo', 'yah', 'ye', 'yea', 'yeah', 
@@ -20,35 +20,37 @@ stop_words = ['ah', 'ahh', 'alright', 'ay', 'aye', 'bridge', 'chorus', 'cmon',
 nlp = spacy.load('en_core_web_sm')
 
 spacy_stopwords = nlp.Defaults.stop_words
+stop_words.extend(spacy_stopwords)
+CUSTOM_STOPWORDS = stop_words
 
-CUSTOM_STOPWORDS = stop_words.extend(spacy_stopwords)
 
-def clean_text(text, stopwords=CUSTOM_STOPWORDS):
-    '''
-    Cleans the input text by removing special characters, whitespaces and stopword
+# def clean_text(text, stopwords=CUSTOM_STOPWORDS):
+#     '''
+#     Cleans the input text by removing special characters, whitespaces and stopword
 
-    Params:
-        path_to_text (str): Path to the .txt to clean.
-        stopwords (list): List of stopwords to remove from the text. Default is None.
+#     Params:
+#         path_to_text (str): Path to the .txt to clean.
+#         stopwords (list): List of stopwords to remove from the text. Default is None.
     
-    Returns:
-        str: Cleaned text.
-    '''
+#     Returns:
+#         str: Cleaned text.
+#     '''
 
-    # Convert to lowercase
-    text = text.lower()
+#     # Convert to lowercase
+#     text = text.lower()
 
-    # Remove special characters, whitespaces and numbers of strings that have numbers in them
-    text = ' '.join(text.split())
-    text = ''.join(e for e in text if e.isalnum() or e.isspace() or e.isnumeric())
+#     # Remove special characters, whitespaces and numbers of strings that have numbers in them
+#     text = ' '.join(text.split())
+#     text = ''.join(e for e in text if e.isalnum() or e.isspace() or e.isnumeric())
 
-    # Remove stopwords
-    if stopwords:
-        text = ' '.join([word for word in text.split() if word not in stopwords])
+#     # Remove stopwords
+#     if stopwords:
+#         text = ' '.join([word for word in text.split() if word not in stopwords])
     
-    return text
+#     return text
 
-def extract_corpus_and_labels_from_songs_csv(csv_input_path, zip_input_path, output_path='data/input/', frac=1):
+
+def extract_corpus_and_labels_from_songs_csv(csv_input_path, output_path='data/input/', frac=1):
     '''
     Extracts corpus and labels from a CSV file and saves them as two .txt files: 'corpus.txt' and 'labels.txt'.
     
@@ -61,14 +63,16 @@ def extract_corpus_and_labels_from_songs_csv(csv_input_path, zip_input_path, out
         None
     '''
     
-    # Ensure the output directory exists
+    # Ensure the output directory exists or create it
     os.makedirs(output_path, exist_ok=True)
-    if not os.path.exists(csv_input_path):
-        # Unzip the file
-        with zipfile.ZipFile(zip_input_path, 'r') as zip_ref:
-            zip_ref.extractall('data/raw/')
-    
+
+    # Check that frac is a float between 0 and 1
+    if not 0 <= frac <= 1:
+        raise ValueError("frac must be a float between 0 and 1.")
+
+
     # Load the CSV file using pandas, drop useless column, and rename Lyrics to lyrics
+    # (We assume to be working with the 500k song dataset)
     df = pd.read_csv(csv_input_path).drop(columns=['Unnamed: 0']).rename(columns={'Lyric': 'lyrics'})
     
     # Check if the required columns exist
