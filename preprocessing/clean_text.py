@@ -100,3 +100,19 @@ def extract_corpus_and_labels_from_songs_csv(csv_input_path, output_path='data/i
     with open(labels_file, 'w', encoding='utf-8') as f:
         f.write("\n".join(labels))
     print(f"Labels have been saved to {labels_file}")
+
+
+def filter_songs_by_genre(corpus_path, labels_path, genre):
+    output_path = os.path.join(os.path.dirname(corpus_path), f'{genre}_songs.txt')
+    
+    with open(corpus_path, 'r', encoding='utf-8') as corpus_file, open(labels_path, 'r', encoding='utf-8') as labels_file:
+        lyrics = corpus_file.readlines()
+        genres = labels_file.readlines()
+    
+    with open(output_path, 'w', encoding='utf-8') as output_file:
+        for lyric, song_genre in zip(lyrics, genres):
+            if song_genre.strip().lower() == genre.lower():
+                output_file.write(lyric)
+    
+    print(f'Filtered lyrics saved to {output_path}')
+    return output_path
