@@ -4,8 +4,9 @@
 *.pkl 
 *.csv:Zone.Identifier
 model/
-results/test_LDA/
+results/
 data/
+results.csv
 .txt
 .tsv
 .pt
