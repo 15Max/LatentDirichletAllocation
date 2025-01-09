@@ -74,33 +74,35 @@ The following is the representation of the model as a pgm:
 
 In our case we used the [OCTIS implementation of LDA](https://github.com/MIND-Lab/OCTIS/blob/master/octis/models/LDA.py) that is based on its corresponding implementation in gensim.
 The model parameters are:
-- n_components: the number of topics to identify in the data
-- doc_topic_prior: the prior on the document topic distribution 
-- topic_word_prior: the prior on the topic word distribution 
-- learning_decay: the learning rate used to update the model parameters (default is 0.7)
-- learning_offset: a parameter that downweights early iterations (default is 10)
-- batch_size: the number of documents to use in each iteration (default is 128)
-- max_iter: the maximum number of iterations to run the algorithm (default is 10)
-- learning_method: the method used to update the model parameters, in our case we used 'online' to speed up the computation (default is 'batch')
-- random_state: the seed used to initialize the model parameters, we set it to 123 to ensure reproducibility
+- num_topics: the number of topics to identify in the data
+- alpha: the prior on the document topic distribution
+- passes: the number of passes through the data
+- iterations: the number of iterations to run the algorithm
+- update_every: the number of documents to process before updating the model parameters
+- chunksize: the number of documents to use in each iteration
+
+### Metrics
+The metrics we chose to evaluate this model and also the ProdLDA model are topic coherence and topic diversity.
+Topic coherence is a measure of how interpretable the topics are, it is a value between 0 and 1 where 1 is the best value, while topic diversity is a measure of how different the topics are from one another and it is also on a scale from 0 to 1.
+Specifically it's defined as the ratio of the number of unique words in the topics to the total number of words in the topics.
+There is a trade-off between these two metrics, as increasing the number of topics will increase the diversity but decrease the coherence of the topics.
+
+Given the nature of this task, human judgement is also important to evaluate the topics identified by the model which is why we plotted the word clouds and the top 10 word distibution for each topic.
+
+##Add mathemathical formulation?
+
 
 #TODO: Discusss hyperparamenter tuning, choice of number of topics
 
 
 
 
-#TODO: discuss metrics, andd maybe new ones, change if needed
-The metrics we took into account to evalute the model are topic coherence and diversity.
-Topic coherence is a measure of how interpretable the topics are, it is a value between 0 and 1 where 1 is the best value, while
-topic diversity is a measure of how different the topics are from one another and it is also on a scale from 0 to 1. 
-It's the ratio of the number of unique words in the topics to the total number of words in the topics.
-Given the nature of this task, human judgement is also important to evaluate the topics identified by the model. The following graphs are useful to better comprehend the model's behaviour and the topics identified.
 
 #TODO: add topic distributions and word clouds, try to intepret
 
 
 
-## More advanced LDA to find 
+## [ProdLDA](references/ProdLDA.pdf) 
 
 
 
@@ -131,7 +133,7 @@ Some useful commands:
 ## References
 - [Latent Dirichlet Allocation, Blei et. alt. (2003);](/References/Main_paper.pdf)
 - [Latent Dirichlet allocation (LDA) and topic modeling: models, applications, a survey, Jelodar et alt. (2018);](/References/LDA_survey.pdf)
-- [Practical Guide to Topic Modeling with Latent Dirichlet Allocation (LDA). Medium , Wicaksono Wijono (2024);](https://towardsdatascience.com/practical-guide-to-topic-modeling-with-lda-05cd6b027bdf)
+- [Autoencoding Variational Inference for topic models, Srivastava enad Sutton (2017)](references/ProdLDA.pdf)
 
 
 ## Authors
