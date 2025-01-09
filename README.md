@@ -1,12 +1,13 @@
 ## Latent Diriclet Allocation (LDA)
 This project explores Latent Dirichlet Allocation (LDA), applied to the [BBC News dataset](https://www.kaggle.com/datasets/hgultekin/bbcnewsarchive).
-This dataset contains 2225 documents from the BBC news website corresponding to stories in five topical areas from 2004-2005. The categories are: business, entertainment, politics, sport, and tech.
-The choice of this datasset is also related to the limited computational resources at our disposal. in fact both the data pre-processing and model training were carried out on a NVIDIA GeForce RTX 4060 Laptop GPU.
+The dataset consists of 2,225 news articles from the BBC website, covering five topical categories: business, entertainment, politics, sport, and tech, published between 2004 and 2005.
 
-The main goal of our project is to identify the topics in these news articles.
-To carry out this task, also known as topic modeling, we will use LDA, a classical techinque in the field of Natural Language Processing (NLP) and ProdLDA, a more advanced version of LDA that leverages the product of experts to improve the interpretability of the topics identified. 
-After computing the topic distributions, they will be visualized and interpreted to understand the main themes present in the dataset.
+The choice of this dataset is influenced by the computational resources available, as both data preprocessing and model training were performed on a NVIDIA GeForce RTX 4060 Laptop GPU.
 
+The primary objective of this project is to identify latent topics in these news articles through topic modeling.
+To achieve this, we employ LDA, a classical technique in Natural Language Processing (NLP), alongside ProdLDA, an advanced variation of LDA that leverages the product of experts to enhance the interpretability of the extracted topics.
+
+Once the topic distributions are computed, they will be visualized and analyzed to gain insights into the main themes present in the dataset.
 ## Project structure
 
 ```bash
