@@ -1,12 +1,10 @@
 ## Latent Diriclet Allocation (LDA)
-This project explores Latent Dirichlet Allocation (LDA), applied to  [dataset]().
-This dataset contains .... 
-Given the limited computational resources at our disposal, we decided to work with a subset of the data.
-The data pre-processing and model training were carried out on a NVIDIA GeForce RTX 4060 Laptop GPU.
+This project explores Latent Dirichlet Allocation (LDA), applied to the [BBC News dataset](https://www.kaggle.com/datasets/hgultekin/bbcnewsarchive).
+This dataset contains 2225 documents from the BBC news website corresponding to stories in five topical areas from 2004-2005. The categories are: business, entertainment, politics, sport, and tech.
+The choice of this datasset is also related to the limited computational resources at our disposal. in fact both the data pre-processing and model training were carried out on a NVIDIA GeForce RTX 4060 Laptop GPU.
 
-
-The main goal of our project is to identify the topics in ...
-To carry out this task, also known as topic modeling, we will use LDA, a classical techinque in the field of Natural Language Processing (NLP).
+The main goal of our project is to identify the topics in these news articles.
+To carry out this task, also known as topic modeling, we will use LDA, a classical techinque in the field of Natural Language Processing (NLP) and ProdLDA, a more advanced version of LDA that leverages the product of experts to improve the interpretability of the topics identified. 
 After computing the topic distributions, they will be visualized and interpreted to understand the main themes present in the dataset.
 
 ## Project structure
@@ -15,56 +13,57 @@ After computing the topic distributions, they will be visualized and interpreted
 TopicModelComparison/
 │
 ├── data/
+│   ├── input/                  # Data ready for preprocessing
 │   ├── raw/                    # Raw, unprocessed data (optional)
 │   └── processed/              # Processed and cleaned data ready for modeling
 │
+├── images/                     # Images used in the README
+│   
 ├── notebooks/
-│   ├── eda.ipynb               # Exploratory Data Analysis (EDA) notebook
-│   ├── lda_notebook.ipynb      # Jupyter notebook for ETM experiments and testing
-│   └── etm_notebook.ipynb      # Jupyter notebook for LDA experiments and testing
+│   ├── EDA.ipynb               # Exploratory Data Analysis (EDA) notebook
+│   ├── LDA_BBC.ipynb           # Jupyter notebook for LDA experiments and testing
+│   └── PROD_BBC.ipynb          # Jupyter notebook for ProdLDA experiments and testing
 │
 ├── papers/
-│   ├──ETM.pdf                  # Main paper for Embedded Topic Modelling (ETM)
+│   ├──OCTIS.pdf                # Main paper for  OCTIS library (OCTIS)
 │   ├──LDA.pdf                  # Main paper for Latent Dirichlet Allocation (LDA)
 │   ├──ProdLDA.pdf              # Main paper for Product of experts LDA (ProdLDA)
 │   └──TM_Survey.pdf            # Paper containing a survey for topic model techniques
 │
+├── preprocessing/
+│   ├── __init__.py             # Initialize the preprocessing package
+│   └── clean_text.py           # Text cleaning, tokenization, stopword removal, etc.
+│
 ├── requirements/
-│   └── environment.yml
+│   ├── environment.yml 
+│   └── requirements.txt
 │
 ├── results/
-│   └── figures/                # Figures, plots, and visualizations
+│   ├── test_LDA/               # Results of LDA model 
+│   └── test_ProdLDA/           # Results of ProdLDA model
+├── utils/
+│   ├── __init__.py             # Initialize the utils package
+│   ├── graph_tools.py          # Helper functions to visualize results
+│   └── package_handler.py      # Helper functions to manage packages
 │
-├── src/
-│   ├── __init__.py             # Python package initialization
-│   │
-│   ├── models/
-│   │   ├── __init__.py         # Initialize the models package
-│   │   ├── etm_model.py        # etm
-│   │   └── lda_model.py        # LDA
-│   ├── preprocessing/
-│   │   ├── __init__.py         # Initialize the preprocessing package
-│   │   ├── clean_text.py       # Text cleaning, tokenization, stopword removal, etc.
-│   │   └── vectorization.py    # Functions for text vectorization (e.g., TF-IDF)
-│   └── utils/
-│       ├── __init__.py         # Initialize the utils package
-│       ├── graph_tools.py      # Helper functions to visualize results
-│       └── data_loader.py      # Helper functions for loading datasets
-│
-├── config.yaml                 # File containing parameters initialization
-│
-├── main.py                     # Script to run LDA and ETM on preloaded dataset
+├── .gitignore                  # Files and directories to be ignored by git
 │
 └── README.md                   # Project documentation
 ```
 
+## [OCTIS](references/OCTIS.pdf)
+This project was mainly developed using the OCTIS library, a python library thought to facilitate the comparison of topic modelling techniques.
+There are adequate tools to preprocess the data, train the models, evaluate them and visualize the results.
+Both LDA and ProdLDA were pre-implemented in the octis library, with refernce to the original papers.
+
 ## Pre-processing
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
-We also added some custom stopwords that were not present in the SpaCy library, such as 
-These words, while normally present in ..., are irrelevant for distinguishing topics from one another.
-Finally we leveraged Spacy for lemmatization and tokenization, it's important to note that the only type words we kept for the analysis were nouns.
+We also added some custom stopwords that were not present in the SpaCy library, such as ....
+These words, while normally present in news articles, are irrelevant for distinguishing topics from one another.
+After these steps, we leveraged a custom function to build the corpus and the labels in the format required by the [OCTIS library](https://github.com/MIND-Lab/OCTIS/tree/master/octis).
+Finally we leveraged the OCTIS preprocessing tool for lemmatization and tokenization, while keeping only words with more than three characters, minimum ten appearances in the dataset and maximum frequency of 0.85.
 
-## [LDA applied to    #TODO finish title
+## [LDA applied to BBC news articles](notebooks/LDA_BBC.ipynb)
 Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document is a mixture of topics, and each topic is a distribution over words.
 The model is based on the bag of words assumption and the De Finetti exchangeability theorem. 
 Its latent variables are the topic-word distribution and the document-topic distribution.
@@ -73,7 +72,7 @@ The following is the representation of the model as a pgm:
 ![alt text](images/LDA.png)
 
 
-In our case we used the [sklearn implementation of LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html#re25e5648fc37-1).
+In our case we used the [OCTIS implementation of LDA](https://github.com/MIND-Lab/OCTIS/blob/master/octis/models/LDA.py) that is based on its corresponding implementation in gensim.
 The model parameters are:
 - n_components: the number of topics to identify in the data
 - doc_topic_prior: the prior on the document topic distribution 
