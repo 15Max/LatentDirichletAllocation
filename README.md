@@ -77,8 +77,8 @@ In our case we used the [OCTIS implementation of LDA](https://github.com/MIND-La
 The model parameters are:
 - num_topics: the number of topics to identify in the data
 - alpha: the prior on the document topic distribution
-- passes: the number of passes through the data
-- iterations: the number of iterations to run the algorithm
+- passes: the number of passes through the corpus
+- iterations: the number of iterations for inference for each document
 - update_every: the number of documents to process before updating the model parameters
 - chunksize: the number of documents to use in each iteration
 
