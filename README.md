@@ -143,4 +143,3 @@ Some useful commands:
 - [Marta Lucas](https://github.com/15Max)
 
 Checkout our brief [presentation](presentation.pdf) for a quick overview of the project. #TODO: add corect link
-
