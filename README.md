@@ -1,5 +1,5 @@
-## Latent Diriclet Allocation (LDA)
-This project explores Latent Dirichlet Allocation (LDA), applied to the [BBC News dataset](https://www.kaggle.com/datasets/hgultekin/bbcnewsarchive).
+## Latent Diriclet Allocation (LDA) for Topic Modeling
+This project explores Latent Dirichlet Allocation (LDA) to solve a topic modelling task on the [BBC News dataset](https://www.kaggle.com/datasets/hgultekin/bbcnewsarchive).
 The dataset consists of 2,225 news articles from the BBC website, covering five topical categories: business, entertainment, politics, sport, and tech, published between 2004 and 2005.
 
 The choice of this dataset is influenced by the computational resources available, as both data preprocessing and model training were performed on a NVIDIA GeForce RTX 4060 Laptop GPU.
@@ -91,12 +91,8 @@ There is a trade-off between these two metrics, as increasing the number of topi
 
 Given the nature of this task, human judgement is also important to evaluate the topics identified by the model which is why we plotted the word clouds and the top 10 word distibution for each topic.
 
-### Parameter optimization
-
-
-
-
-
+We also used bayesian optimization to find the best hyperparmeter configuration for the model. 
+In the case of LDA we only optimizzed the number of topics.
 
 
 ## [ProdLDA](references/ProdLDA.pdf) 
@@ -130,13 +126,21 @@ The model parameters are:
 - num_samples: number of samples used for estimating the ELBO
 - use_partitions: whether to use partitions or not
 
-### Parameter optimization
-
+### Metrics and parameter optimization
+In the case of ProdLDA used the same metrics as for LDA, topic coherence and topic diversity.
+We also leveraged bayesian optimization to find the best of the following hyperparameters:
+- num_topics
+- leraning rate
+- momentum
+- num_neurons
 
 ## Conclusions
+As expected we obtained better results with ProdLDA with respect to LDA in terms of topic coherence, diversity and interpretability. 
+This is reflected in the specificity of the topics identified by the model, which are more clearly defined and less overlapping than those obtained with LDA.
+Furthermore ProdLDA is more efficient in terms of computational time, adding to its appeal as a topic modeling technique.
 
-
-
+Some possible improvements for our project could be to use a more complex dataset and further optimize the model hyperparameters to obtain even better results.
+Both these tasks would require more computational resources than we had available at the moment.
 
 ## Conda environment setup
 There is a [.yml file](environment.yml) containing all the neccesary packages to run the code we developed.
