@@ -5,7 +5,6 @@
 *.csv:Zone.Identifier
 model/
 results/
-data/
 results.csv
 .txt
 .tsv
