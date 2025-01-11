@@ -3,6 +3,7 @@
 *.csv
 *.pkl 
 *.csv:Zone.Identifier
+*.txt:Zone.Identifier
 model/
 results/
 results.csv
