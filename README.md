@@ -5,7 +5,7 @@ The dataset consists of 2,225 news articles from the BBC website, covering five 
 The choice of this dataset is influenced by the computational resources available, as both data preprocessing and model training were performed on a NVIDIA GeForce RTX 4060 Laptop GPU.
 
 The primary objective of this project is to identify latent topics in these news articles through topic modeling.
-To achieve this, we employ LDA, a classical technique in Natural Language Processing (NLP), alongside ProdLDA, an advanced variation of LDA that leverages the product of experts to enhance the interpretability of the extracted topics.
+To achieve this, we employ LDA, a classical technique in Natural Language Processing (NLP), alongside ProdLDA, an advanced variant of LDA.
 
 Once the topic distributions are computed, they will be visualized and analyzed to gain insights into the main themes present in the dataset.
 ## Project structure
@@ -53,21 +53,21 @@ TopicModelComparison/
 ```
 
 ## [OCTIS](references/OCTIS.pdf)
-This project was mainly developed using the OCTIS library, a python library thought to facilitate the comparison of topic modelling techniques.
-There are adequate tools to preprocess the data, train the models, evaluate them and visualize the results.
-Both LDA and ProdLDA were pre-implemented in the octis library, with refernce to the original papers.
+This project was mainly developed using the OCTIS library, a python library that facilitates the comparison of topic modelling techniques.
+It contains adequate tools to preprocess the data, train the models, evaluate them and visualize the results.
+Both LDA and ProdLDA were pre-implemented in the octis library, with fidelty to the original papers.
 
 ## Pre-processing
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
 We also added some custom stopwords that were not present in the SpaCy library, such as "year, month and day".
-These words, while normally present in news articles, are irrelevant for distinguishing topics from one another.
-After these steps, we leveraged a custom function to build the corpus and the labels in the format required by the [OCTIS library](https://github.com/MIND-Lab/OCTIS/tree/master/octis).
-Finally we leveraged the OCTIS preprocessing tool for lemmatization and tokenization, while keeping only words with three or more characters, minimum ten appearances in the dataset and maximum frequency of 0.85.
+These words, while normally present in news articles, are irrelevant for distinguishing topics from one another and were very frequent in most documents.
+After these steps, a custom function to build the corpus and the labels in the format required by the [OCTIS library](https://github.com/MIND-Lab/OCTIS/tree/master/octis) is employed.
+Finally we pass the corpus to the OCTIS preprocessing tool for lemmatization and tokenization, while keeping only words with three or more characters, minimum ten appearances in the dataset and maximum frequency of 0.85.
 We assumed that words that appear in less than ten documents are not relevant for the topic modeling task, while words that appear in more than 85% of the documents are too common to be useful for distinguishing topics.
 
 ## [LDA applied to BBC news articles](notebooks/LDA_BBC.ipynb)
 Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document is a mixture of topics, and each topic is a distribution over words.
-The model is based on the bag of words assumption and the De Finetti exchangeability theorem. 
+The model is built on the bag of words assumption and the De Finetti exchangeability theorem. 
 Its latent variables are the topic-word distribution and the document-topic distribution.
 The following is the representation of the model as a pgm:
 
@@ -85,14 +85,14 @@ The model parameters are:
 
 ### Metrics
 The metrics we chose to evaluate this model and also the ProdLDA model are topic coherence and topic diversity.
-Topic coherence is a measure of how interpretable the topics are, it is a value between 0 and 1 where 1 is the best value, while topic diversity is a measure of how different the topics are from one another and it is also on a scale from 0 to 1.
+Topic coherence is a measure of how interpretable the topics are, it is a value between 0 and 1 where 1 is the best value. It quantifies the semantic coherence of the top words in a topic by measuring how frequently they appear together in a corpus. 
+Topic diversity is a measure of how different the topics are from one another and it is also on a scale from 0 to 1.
 Specifically it's defined as the ratio of the number of unique words in the topics to the total number of words in the topics.
-There is a trade-off between these two metrics, as increasing the number of topics will increase the diversity but decrease the coherence of the topics.
 
 Given the nature of this task, human judgement is also important to evaluate the topics identified by the model which is why we plotted the word clouds and the top 10 word distibution for each topic.
 
-We also used bayesian optimization to find the best hyperparmeter configuration for the model. 
-In the case of LDA we only optimizzed the number of topics.
+Bayesian optimization was also used to help in finding the best hyperparmeter configuration for the model. 
+In the case of LDA we only optimized the number of topics.
 
 
 ## [ProdLDA](references/ProdLDA.pdf) 
@@ -135,11 +135,11 @@ We also leveraged bayesian optimization to find the best of the following hyperp
 - num_neurons
 
 ## Conclusions
-As expected we obtained better results with ProdLDA with respect to LDA in terms of topic coherence, diversity and interpretability. 
+As expected we obtained better results with ProdLDA in terms of topic coherence, diversity and interpretability. 
 This is reflected in the specificity of the topics identified by the model, which are more clearly defined and less overlapping than those obtained with LDA.
 Furthermore ProdLDA is more efficient in terms of computational time, adding to its appeal as a topic modeling technique.
 
-Some possible improvements for our project could be to use a more complex dataset and further optimize the model hyperparameters to obtain even better results.
+Possible improvements for our project could be to use a more complex dataset and further optimize the model hyperparameters to obtain even better results.
 Both these tasks would require more computational resources than we had available at the moment.
 
 ## Conda environment setup
