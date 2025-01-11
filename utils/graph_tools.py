@@ -16,8 +16,6 @@ color_map = {
     'politics': color_palette[4]
 }
 
-
-# Plot histograms for the top 10 words per genre using seaborn
 def word_frequencies_barplot_dataset(dataset):
     """
     Plot the barplots of word frequencies in the dataset using seaborn.
@@ -82,8 +80,6 @@ def word_frequencies_barplot_dict(results: dict):
         plt.tight_layout()
         plt.show()
 
-
-# Compute cosine similarity between genres
 def compute_genre_similarity(dataset: Dataset) -> pd.DataFrame:
     '''
     Compute the cosine similarity between genres based on the TF-IDF representation of the documents
