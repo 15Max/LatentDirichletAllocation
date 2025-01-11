@@ -59,10 +59,11 @@ Both LDA and ProdLDA were pre-implemented in the octis library, with refernce to
 
 ## Pre-processing
 We used the [SpaCy library](https://spacy.io/usage/linguistic-features) to remove stopwords, numeric chars and punctuation, along with a custom function to pre-treat sentences.
-We also added some custom stopwords that were not present in the SpaCy library, such as ....
+We also added some custom stopwords that were not present in the SpaCy library, such as "year, month and day".
 These words, while normally present in news articles, are irrelevant for distinguishing topics from one another.
 After these steps, we leveraged a custom function to build the corpus and the labels in the format required by the [OCTIS library](https://github.com/MIND-Lab/OCTIS/tree/master/octis).
-Finally we leveraged the OCTIS preprocessing tool for lemmatization and tokenization, while keeping only words with more than three characters, minimum ten appearances in the dataset and maximum frequency of 0.85.
+Finally we leveraged the OCTIS preprocessing tool for lemmatization and tokenization, while keeping only words with three or more characters, minimum ten appearances in the dataset and maximum frequency of 0.85.
+We assumed that words that appear in less than ten documents are not relevant for the topic modeling task, while words that appear in more than 85% of the documents are too common to be useful for distinguishing topics.
 
 ## [LDA applied to BBC news articles](notebooks/LDA_BBC.ipynb)
 Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document is a mixture of topics, and each topic is a distribution over words.
@@ -90,16 +91,11 @@ There is a trade-off between these two metrics, as increasing the number of topi
 
 Given the nature of this task, human judgement is also important to evaluate the topics identified by the model which is why we plotted the word clouds and the top 10 word distibution for each topic.
 
-##Add mathemathical formulation?
-
-
-#TODO: Discusss hyperparamenter tuning, choice of number of topics
+### Parameter optimization
 
 
 
 
-
-#TODO: add topic distributions and word clouds, try to intepret
 
 
 
@@ -134,7 +130,8 @@ The model parameters are:
 - num_samples: number of samples used for estimating the ELBO
 - use_partitions: whether to use partitions or not
 
-#TODO: comment on hyperparameter tuning
+### Parameter optimization
+
 
 ## Conclusions
 
