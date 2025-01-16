@@ -66,15 +66,15 @@ Finally we pass the corpus to the OCTIS preprocessing tool for lemmatization and
 We assumed that words that appear in less than ten documents are not relevant for the topic modeling task, while words that appear in more than 85% of the documents are too common to be useful for distinguishing topics.
 
 ## [LDA applied to BBC news articles](notebooks/LDA_BBC.ipynb)
-Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document is a mixture of topics, and each topic is a distribution over words.
+Latent Dirichlet Allocation (LDA) is a generative probabilistic model that discovers hidden topics in a collection of documents by assuming each document as a mixture of topics, and each topic as a distribution over words.
 The model is built on the bag of words assumption and the De Finetti exchangeability theorem. 
-Its latent variables are the topic-word distribution and the document-topic distribution.
+Its latent variables are the topic-word distribution $\beta$, the dirichlet parameter $\alpha$, the documen-topic distribution $\theta$ and the topic Z from which the word W is drown.
 The following is the representation of the model as a pgm:
 
 ![alt text](images/LDA.png)
 
 
-In our case we used the [OCTIS implementation of LDA](https://github.com/MIND-Lab/OCTIS/blob/master/octis/models/LDA.py) that is based on its corresponding implementation in gensim.
+In our case we used the [OCTIS implementation of LDA](https://github.com/MIND-Lab/OCTIS/blob/master/octis/models/LDA.py), that is based on its corresponding implementation in gensim.
 The model parameters are:
 - num_topics: the number of topics to identify in the data
 - alpha: the prior on the document topic distribution
@@ -160,10 +160,10 @@ Some useful commands:
   ```
   
 ## References
-- [Latent Dirichlet Allocation, Blei et. alt. (2003);](/References/Main_paper.pdf)
-- [Latent Dirichlet allocation (LDA) and topic modeling: models, applications, a survey, Jelodar et alt. (2018);](/References/LDA_survey.pdf)
-- [Autoencoding Variational Inference for topic models, Srivastava and Sutton (2017);](references/ProdLDA.pdf)
-- [OCTIS: Comparing and Optimizing Topic Models is Simple!, Terragni et al. (2021)](references/OCTIS.pdf)
+- [Latent Dirichlet Allocation, Blei et. alt. (2003);](/papers/Main_paper.pdf)
+- [Latent Dirichlet allocation (LDA) and topic modeling: models, applications, a survey, Jelodar et alt. (2018);](/papers/LDA_survey.pdf)
+- [Autoencoding Variational Inference for topic models, Srivastava and Sutton (2017);](/papers/ProdLDA.pdf)
+- [OCTIS: Comparing and Optimizing Topic Models is Simple!, Terragni et al. (2021)](/papers/OCTIS.pdf)
 
 
 ## Authors
@@ -171,4 +171,4 @@ Some useful commands:
 - [Edoardo Cortolezzis](https://github.com/EdoardoCortolezzis)
 - [Marta Lucas](https://github.com/15Max)
 
-Checkout our brief [presentation](presentation.pdf) for a quick overview of the project. #TODO: add corect link
+Checkout our brief [presentation](presentation.pdf) for a quick overview of the project.
