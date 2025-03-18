@@ -1,7 +1,0 @@
-
-python==3.9
-notebook
-spacy
-scikit-learn==1.1.0
-octis
-torch
